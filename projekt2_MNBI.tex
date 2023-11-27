@@ -1,0 +1,111 @@
+\documentclass[12pt]{report}
+\usepackage{amssymb,amsmath,amsfonts,amsthm,graphicx,xcolor}
+\usepackage[all]{xy}
+\usepackage{framed}
+
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems}
+\usepackage{graphicx}
+
+%\usepackage[english,polish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+
+%\usepackage[utf8]{fontenc}
+%\usepackage[cp1250]{inputenc}
+
+
+
+\begin{document}
+{
+\begin{center}
+\textbf
+{
+\small\textsf{\\ Metody Numeryczne dla Bioinformatyk\'ow\\ Projekt II 
+%\scalebox{.005}
+}
+}\end{center}
+}
+\noindent
+W ramach Projektu II nale\.zy rozwi\k{a}za\'c poni\.zsze zadania a wyniki zapisa\'c w GitHub. Plik z rozwi\k{a}zaniem nale\.zy udost\k{e}pni\'c do 6.12.2023. 
+
+\vspace{5mm}
+\noindent
+{\bf Zad.1.} Korzysaj\k{a}c z algorytmu wyprowadzonego na \'cwiczeniac napisa\'c program do obliczania naturalnej funkcji sklejanej sze\'sciennej $S$, kt\'ora spe\l{}nia nast\k{e}puj\k{a}ce warunki interpolacyjne:
+
+\vspace{3mm}
+{\center
+
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+$t_i$ & 1.0 & 2.0 & 3.5 & 5.0 & 6.0 & 9.0 & 9.5 \\
+\hline
+$y_i$ & 3.0 & 1.0 & 4.0 & 0.0 & 0.5 & $-2.0$ & $-3.0$\\
+\hline
+\end{tabular}
+
+}
+\vspace{3mm}
+
+\vspace{5mm}
+\noindent
+gdzie $t_i$ s\k{a} w\k{e}z\l{}ami, a $y_i$ odpowiedaj\k{a}cymi im warto\'sciami. Narysowa\'c wykres funkcji $S$.
+
+\vspace{2mm}
+\noindent
+{\bf Algorytm (przypomnienie)}: Rozwa\.zmy $n+1$ w\k{e}z\l{}\'ow $t_0$, $t_1$, ..., $t_n$ oraz odpowadaj\k{a}ce im warto\'sci funkcji: $y_0$, $y_1$, ..., $y_n$. Algorytm do wyznaczenia naturalnej funkcji sklejanej sze\'sciennej sk\l{}ada si\k{e} z nast\k{e}puj\k{a}cych krok\'ow:
+\begin{enumerate}
+\item Policzenia $h_i$ oraz $b_i$ ze wzor\'ow:
+\begin{align}
+h_i &\leftarrow t_{i+1}-t_i\nonumber\\
+b_i &\leftarrow \frac{6}{h_i}\bigg(y_{i+1}-y_i\bigg) \nonumber
+\end{align}
+\item Policzenia $u_1$ oraz $v_1$ ze wzor\'ow:
+\begin{align}
+u_1 &\leftarrow 2(h_0+h_1)\nonumber\\
+v_1 &\leftarrow b_1-b_0 \nonumber
+\end{align}
+oraz pozosta\l{}ych wsp\'o\l{}czynnik\'ow $u_i$ i $v_i$:
+\begin{align}
+u_i &\leftarrow 2(h_{i-1}+h_i)- \frac{h_{i-1}^2}{u_{i-1}}\nonumber\\
+v_i &\leftarrow b_i - b_{i-1} - \frac{h_{i-1} v_{i-1}}{u_{i-1}}\nonumber
+\end{align}
+\item Mamy ju\.z wszystkie dane potrzebne do policzenia $z_i$. Zaczynamy od ustalenia warunku pocz\k{a}tkowego $z_n\leftarrow 0$, a dalej liczymy:
+\begin{align}
+z_i \leftarrow \frac{1}{u_i} \bigg( v_i - h_i z_{i+1} \bigg).\nonumber
+\end{align}
+zaczynaj\k{a}c od $i=n-1$ i przechodz\k{a}c po kolei a\.z do $i=1$. Na koniec wybieramy $z_0=0$ dla naturalnej funkcji sklejanej. W ten spos\'ob otrzymujemy wszystkie $z_i$ dla $i=0,1,2,...,n$.
+\item W kolejnej cz\k{e}\'sci algorytmu liczymy wsp\'o\l{}czynniki $A_i$, $B_i$ oraz $C_i$ ze wzor\'ow:
+\begin{align}
+A_i \leftarrow \frac{1}{6h_i}\Big( z_{i+1}-z_i\Big), && B_i \leftarrow \frac{z_i}{2} && C_i \leftarrow -\frac{h_i}{6}\Big(z_{i+1}+2z_i \Big)+\frac{1}{h_i} \Big(y_{i+1}-y_i\Big) \nonumber
+\end{align}
+kt\'ore podstawiamy do wzoru na $S_i(x)$:
+\begin{align}
+S_i(x) \leftarrow y_i + (x-t_i)\Big[ C_i +(x-t_i)\big(B_i+(x-t_i)A_i\big)\Big]\nonumber
+\end{align}
+\item W ostatnim kroku nale\.zy {\it sklei\'c} funkcje $S_i(x)$ w jedn\k{a} funkcj\k{e} $S(x)$.
+\end{enumerate} 
+
+\vspace{3mm}
+\noindent
+{\bf Zad.2.} Na jednym rysunku przedstawi\'c wykresy funkcji sklejanej sze\'sciennej z poprzedniego zadania, funkcji sklejanej stopnia 1 (z ostatnich \'cwicze\'n) oraz wielomianu interpoluj\k{a}cego otrzymanego ze wzoru Lagrange'a dla danych z Zad.1. Na wykresie powinna znale\'z\'c si\k{e} legenda z oznaczeniem ka\.zdej z funkcji. 
+
+\vspace{3mm}
+\noindent
+{\bf Zad. 3.} Por\'owna\'c wykresy uzyskanej funkcji sklejanej sze\'sciennej oraz funkcji CubicSpline z modu\l{}u scipy.interpolate dla danych z Zad.1. Czy wykresy si\k{e} pokrywaj\k{a}? Je\'sli nie, to dlaczego?
+
+\vspace{3mm}
+\noindent
+{\bf Uwaga 1:} W pisaniu kodu przydatny mo\.ze by\'c program, kt\'ory napisali\'smy na \'cwiczeniach do interpolacji funkcj\k{a} sklejan\k{a} stopnia 1.
+
+\noindent
+{\bf Uwaga 2:} Zach\k{e}cam do kontaktu w przypadku jakichkolwiek w\k{a}tpliwo\'sci czy problem\'ow z napisaniem programu.
+
+\end{document}
+
+
+%\centerline{TWIERDZENIE SINUS\'OW I COSINUS\'OW}
+
+
+\end{document}
