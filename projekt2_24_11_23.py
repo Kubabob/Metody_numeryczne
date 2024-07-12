@@ -46,18 +46,19 @@ lista = []
 IKSY = []
 
 
-for i in range(data.shape[0]-1):
-    if i == 0:
-        iksy = np.linspace(0, data[i+1][0], 20)
-    elif i == data.shape[0]-2:
-        iksy = np.linspace(data[i][0], 10.5, 20)
-    else:
-        iksy = np.linspace(data[i][0], data[i + 1][0], 20)
+if __name__ == "__main__":
+    for i in range(data.shape[0]-1):
+        if i == 0:
+            iksy = np.linspace(0, data[i+1][0], 20)
+        elif i == data.shape[0]-2:
+            iksy = np.linspace(data[i][0], 10.5, 20)
+        else:
+            iksy = np.linspace(data[i][0], data[i + 1][0], 20)
 
-    IKSY.extend(iksy)
-    interpolated = S(i, iksy)
-    lista.extend(interpolated)
-else:
-    plt.scatter(data[:,0], data[:,1])
-    plt.plot(IKSY, lista)
-    plt.show()
+        IKSY.extend(iksy)
+        interpolated = S(i, iksy)
+        lista.extend(interpolated)
+    else:
+        plt.scatter(data[:,0], data[:,1])
+        plt.plot(IKSY, lista)
+        plt.show()
